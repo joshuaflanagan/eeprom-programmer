@@ -52,8 +52,8 @@ uint16_t UCODE_TEMPLATE[16][8] = {
   { MI|CO,  RO|II|CE,  IO|J,   0,      0,           0, 0, 0 },   // 0110 - JMP
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 0111 - JC
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1000 - JZ
-  { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1001
-  { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1010
+  { MI|CO,  RO|II|CE,  IO|BI,  EO|AI|FI,0,          0, 0, 0 },   // 1001 - ADDI
+  { MI|CO,  RO|II|CE,  IO|BI,  EO|AI|SU|FI,0,       0, 0, 0 },   // 1010 - SUBI
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1011
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1100
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1101
