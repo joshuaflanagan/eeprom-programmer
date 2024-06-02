@@ -63,6 +63,10 @@ uint16_t UCODE_TEMPLATE[16][8] = {
 
 uint16_t ucode[4][16][8];
 
+/*
+ * The same set of instructions is copied multiple times into memory
+ * so that it is addressable in different states (flags on/off).
+ */
 void initUCode() {
   // ZF = 0, CF = 0
   memcpy(ucode[FLAGS_Z0C0], UCODE_TEMPLATE, sizeof(UCODE_TEMPLATE));
@@ -178,6 +182,12 @@ void setup() {
     int instruction = (address & 0b0001111000) >> 3;
     int step        = (address & 0b0000000111);
 
+    // Each EEPROM only holds 8 bits per address, so we need two EEPROMS
+    // to hold an entire 16 bit instruction.
+    // The same content is written to both EEPROMs (for convenience), but
+    // one of the chips has the byte_sel pin LO, and the other has it HI,
+    // so for the same address, they will each read two different parts of
+    // the EEPROM - which together return the full 16 bits.
     if (byte_sel) {
       writeEEPROM(address, ucode[flags][instruction][step]);
     } else {
