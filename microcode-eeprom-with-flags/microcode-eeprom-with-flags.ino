@@ -152,6 +152,12 @@ void printContents(int start, int length) {
 
 
 void setup() {
+  Serial.begin(57600); // make sure Serial Monitor uses same baud
+  Serial.println("Press Enter to program EEPROM:");
+  while (Serial.available() < 1){
+    delay(200);
+  }
+  Serial.read();
   // put your setup code here, to run once:
   initUCode();
 
@@ -211,4 +217,3 @@ void loop() {
   // put your main code here, to run repeatedly:
 
 }
-
