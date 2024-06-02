@@ -35,6 +35,13 @@
 #define JC  0b0111
 #define JZ  0b1000
 
+uint16_t diag_data[] = {
+  AO|FI, AI|J, II|CO, IO|CE, RO|OI, RI|BI, MI|SU, HLT|EO,
+};
+
+// Each instruction is limited to 5 steps because thats the current maximum
+// of the subinstruction counter. The first two steps are always the same, so
+// really there are only 3 steps available.
 uint16_t UCODE_TEMPLATE[16][8] = {
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 0000 - NOP
   { MI|CO,  RO|II|CE,  IO|MI,  RO|AI,  0,           0, 0, 0 },   // 0001 - LDA
@@ -128,7 +135,7 @@ void writeEEPROM(int address, byte data) {
  * Read the contents of the EEPROM and print them to the serial monitor.
  */
 void printContents(int start, int length) {
-  for (int base = start; base < length; base += 16) {
+  for (int base = start; base < (start + length); base += 16) {
     byte data[16];
     for (int offset = 0; offset <= 15; offset += 1) {
       data[offset] = readEEPROM(base + offset);
@@ -176,12 +183,27 @@ void setup() {
     }
   }
 
+  Serial.print("Writing diagnostic data");
+  // Program the diagnostics mode
+  // when A10 (1024 bit) is high
+  
+  for (int address = 0; address < sizeof(diag_data)/sizeof(diag_data[0]); address += 1){
+    writeEEPROM(address + 1024, diag_data[address] >> 8);
+  }
+  for (int address = 0; address < sizeof(diag_data)/sizeof(diag_data[0]); address += 1){
+    writeEEPROM(address + 1024 + 128, diag_data[address]);
+  }
+
   Serial.println(" done");
 
 
   // Read and print out the contents of the EERPROM
   Serial.println("Reading EEPROM");
   printContents(0, 1024);
+  Serial.println("Diagnostics - left");
+  printContents(1024, 16);
+  Serial.println("Diagnostics - right");
+  printContents(1024 + 128, 16);
 }
 
 
