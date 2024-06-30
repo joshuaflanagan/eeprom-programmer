@@ -54,8 +54,8 @@ uint16_t UCODE_TEMPLATE[16][8] = {
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1000 - JZ
   { MI|CO,  RO|II|CE,  IO|BI,  EO|AI|FI,0,          0, 0, 0 },   // 1001 - ADDI
   { MI|CO,  RO|II|CE,  IO|BI,  EO|AI|SU|FI,0,       0, 0, 0 },   // 1010 - SUBI
-  { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1011
-  { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1100
+  { MI|CO,  RO|II|CE,  IO|MI,  RO|J    0,           0, 0, 0 },   // 1011 - JMPI (indirect - jump to location in address)
+  { MI|CO,  RO|II|CE,  AOI|J   0,      0,           0, 0, 0 },   // 1100 - JMPA (jump to location in A)
   { MI|CO,  RO|II|CE,  0,      0,      0,           0, 0, 0 },   // 1101
   { MI|CO,  RO|II|CE,  AO|OI,  0,      0,           0, 0, 0 },   // 1110 - OUT
   { MI|CO,  RO|II|CE,  HLT,    0,      0,           0, 0, 0 },   // 1111 - HLT
