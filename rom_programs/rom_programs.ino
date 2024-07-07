@@ -13,14 +13,16 @@
 #define NOP 0b0000 << 4
 #define LDA 0b0001 << 4
 #define ADD 0b0010 << 4
-#define ADI 0b1001 << 4
+#define ADDI 0b1001 << 4
 #define SUB 0b0011 << 4
-#define SBI 0b1010 << 4
+#define SUBI 0b1010 << 4
 #define STA 0b0100 << 4
 #define LDI 0b0101 << 4
 #define JMP 0b0110 << 4
 #define JC  0b0111 << 4
 #define JZ  0b1000 << 4
+#define JMPI 0b1011 << 4
+#define JMPA 0b1110 << 4
 #define OUT 0b1110 << 4
 #define HLT 0b1111 << 4
 
@@ -78,7 +80,7 @@ byte program3[] = {
   LDA | Y,
   STA | COUNTER, // counter = y
   // LOOP
-  SBI | 1, // A=X-1
+  SUBI | 1, // A=X-1
   JC  | 9,  // goto NOT_DONE (subtraction sets carry, unless it wraps)
   LDA | RESULT,  // A=result
   OUT,      // show result
