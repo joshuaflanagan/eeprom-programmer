@@ -22,7 +22,7 @@
 #define JC  0b0111 << 4
 #define JZ  0b1000 << 4
 #define JMPI 0b1011 << 4
-#define JMPA 0b1110 << 4
+#define JMPA 0b1100 << 4
 #define OUT 0b1110 << 4
 #define HLT 0b1111 << 4
 
