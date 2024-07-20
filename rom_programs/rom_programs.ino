@@ -30,11 +30,74 @@
 // count by 1
 #define COUNTER 14
 byte program0[] = {
-  LDI | 1,
-  STA | COUNTER,
-  OUT,
-  ADD | COUNTER,
-  JMP | 2
+    LDI | 1,
+    STA | COUNTER,
+    OUT,
+    ADD | COUNTER,
+    JMP | 2
+};
+
+byte program1[] = {
+    LDI  | 15, // build address 0x0020 in register A
+    ADDI | 15, // build address 0x0020 in register A
+    ADDI | 2, // build address 0x0020 in register A
+    JMPA | 0, // jump to __WRITE_ADDRESSES
+
+// __J_INCR:
+    JMPI | 1, // continue conditional jump for INCR
+
+// __J_EVEN:
+    JMPI | 0, // continue conditional jump for EVEN
+
+// __START:
+    LDI  | 0,
+    STA  | 15, // D = 0
+    LDA  | 12,
+    STA  | 14, // MOD = X
+
+// LOOP:
+    LDA  | 14,
+    SUB  | 13, // MOD - Y
+    JZ   | 5,
+    JC   | 4,
+    JMPI | 2, // rewritten from JMP DONE
+
+// INCR:
+    STA  | 14, // MOD = MOD - Y
+    LDA  | 15,
+    ADDI | 1,
+    STA  | 15, // D = D + 1
+    JMPI | 3, // rewritten from JMP LOOP
+
+// EVEN:
+    STA  | 14, // MOD = MOD - Y
+    LDA  | 15,
+    ADDI | 1,
+    STA  | 15, // D = D + 1
+
+// DONE:
+    LDA  | 15,
+    OUT  | 0,
+    NOP  | 0,
+    LDA  | 14,
+    OUT  | 0,
+    NOP  | 0,
+    JMPI | 2, // rewritten from JMP DONE
+    HLT  | 0, // prevent accidental overflow
+
+// __WRITE_ADDRESSES:
+    LDI  | 15, // build address 0x0014 for EVEN
+    ADDI | 5, // build address 0x0014 for EVEN
+    STA  | 0, // store address for EVEN
+    LDI  | 15, // build address 0x000F for INCR
+    STA  | 1, // store address for INCR
+    LDI  | 15, // build address 0x0018 for DONE
+    ADDI | 9, // build address 0x0018 for DONE
+    STA  | 2, // store address for DONE
+    LDI  | 10, // build address 0x000A for LOOP
+    STA  | 3, // store address for LOOP
+    JMP  | 6, // jump back to the beginning of the program
+
 };
 
 // memory locations to use for variables
@@ -42,12 +105,14 @@ byte program0[] = {
 #define Y 1
 
 // count by value in 0x00
+/*
 byte program1[] = {
   LDI | 0,
   OUT,
   ADD | X,
   JMP | 1
 };
+*/
 
 // fibonacci
 byte program2[] = {
